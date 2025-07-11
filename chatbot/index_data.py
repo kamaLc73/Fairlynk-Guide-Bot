@@ -2,6 +2,8 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.vectorstores import FAISS
 from langchain.embeddings import HuggingFaceEmbeddings
 import os
+import logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(levelname)s] %(message)s')
 
 def chunk_text(text, chunk_size=500, chunk_overlap=50):
     text_splitter = RecursiveCharacterTextSplitter(
@@ -26,8 +28,8 @@ def index_data(input_path, vectorstore_path="vectorstore/db_faiss"):
     os.makedirs(vectorstore_path, exist_ok=True)
     vectorstore = FAISS.from_texts(chunks, embeddings)
     vectorstore.save_local(vectorstore_path)
-    print(f"VectorStore FAISS sauvegardé dans {vectorstore_path}/index.faiss et {vectorstore_path}/index.pkl")
-    print(f"Nombre de chunks indexés : {len(chunks)}")
+    logging.info(f"VectorStore FAISS sauvegardé dans {vectorstore_path}/index.faiss et {vectorstore_path}/index.pkl")
+    logging.info(f"Nombre de chunks indexés : {len(chunks)}")
 
 if __name__ == "__main__":
     input_path = "data/guide_fairlynk.txt"
