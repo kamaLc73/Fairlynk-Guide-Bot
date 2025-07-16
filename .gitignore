@@ -4,15 +4,15 @@ env
 
 __pycache__
 
-guide.txt
+# guide.txt
 
 TO_BE_INCLUDED.txt
 
-*.faiss
+# *.faiss
 
-*.pkl
+# *.pkl
 
-*.txt
+# *.txt
 
-*.pdf
+# *.pdf
 

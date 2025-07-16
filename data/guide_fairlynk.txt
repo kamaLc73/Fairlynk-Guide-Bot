@@ -1,0 +1,580 @@
+Guide exhaustif de l’application FAIRLYNK pour un
+pipeline RAG
+4 juillet 2025
+Table des matières
+1 Introduction 2
+1.1 Rôle de Digiteam dans le développement de FAIRLYNK . . . . . . . . . 3
+2 Cas dusage sectoriels 4
+2.1 Banque et finance . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 4
+2.2 Assurance . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 5
+2.3 Ressources humaines . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 5
+2.4 Achats . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 5
+3 Exemples de contrats 5
+3.1 Contrat de prêt bancaire . . . . . . . . . . . . . . . . . . . . . . . . . . . 5
+3.2 Police dassurance . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 6
+3.3 Contrat de travail . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 6
+3.4 Contrat fournisseur . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 6
+3.5 Contrat de partenariat commercial . . . . . . . . . . . . . . . . . . . . . 7
+4 Exemples de modèles de contrats 7
+4.1 Modèle de contrat de prêt bancaire . . . . . . . . . . . . . . . . . . . . . 7
+4.2 Modèle de police dassurance . . . . . . . . . . . . . . . . . . . . . . . . . 7
+4.3 Modèle de contrat de travail . . . . . . . . . . . . . . . . . . . . . . . . . 8
+4.4 Modèle de contrat fournisseur . . . . . . . . . . . . . . . . . . . . . . . . 8
+4.5 Modèle de contrat de partenariat commercial . . . . . . . . . . . . . . . . 9
+5 Exemples de clauses types 9
+5.1 Clause de confidentialité . . . . . . . . . . . . . . . . . . . . . . . . . . . 9
+5.2 Clause de pénalité pour retard . . . . . . . . . . . . . . . . . . . . . . . . 9
+5.3 Clause de résiliation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 10
+5.4 Clause de force majeure . . . . . . . . . . . . . . . . . . . . . . . . . . . 10
+1
+6 Avantages de lintelligence artificielle dans FAIRLYNK 10
+7 Intégrations avec dautres outils 11
+8 Meilleures pratiques pour utiliser FAIRLYNK 11
+8.1 Optimisation des workflows . . . . . . . . . . . . . . . . . . . . . . . . . 11
+8.2 Gestion de la contrathèque . . . . . . . . . . . . . . . . . . . . . . . . . . 11
+8.3 Utilisation de lIA . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 11
+9 Fonctionnalités avancées 11
+9.1 Gestion des versions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 12
+9.2 Alertes automatiques . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 12
+9.3 Signatures électroniques . . . . . . . . . . . . . . . . . . . . . . . . . . . 12
+10 Connexion et gestion des utilisateurs 12
+10.1 Créer un compte via une invitation . . . . . . . . . . . . . . . . . . . . . 12
+10.2 Connexion à la plateforme . . . . . . . . . . . . . . . . . . . . . . . . . . 12
+10.3 Réinitialisation du mot de passe . . . . . . . . . . . . . . . . . . . . . . . 13
+11 Gestion des documents 13
+11.1 Créer un nouveau document à partir dun modèle . . . . . . . . . . . . . 13
+11.2 Créer un nouveau contrat à partir de zéro . . . . . . . . . . . . . . . . . 14
+11.3 Créer un contrat à partir dun document Word, PowerPoint ou PDF . . . 14
+11.4 Partager un document avec un collaborateur . . . . . . . . . . . . . . . . 14
+11.5 Supprimer un document . . . . . . . . . . . . . . . . . . . . . . . . . . . 15
+11.6 Créer un modèle de contrat . . . . . . . . . . . . . . . . . . . . . . . . . 15
+12 Administration 16
+12.1 Créer un nouveau champ intelligent . . . . . . . . . . . . . . . . . . . . . 16
+12.2 Créer un workflow . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 16
+12.3 Créer un nouveau groupe . . . . . . . . . . . . . . . . . . . . . . . . . . . 16
+12.4 Créer un nouveau rôle . . . . . . . . . . . . . . . . . . . . . . . . . . . . 17
+13 Statistiques et métriques 17
+14 FAQ courantes 17
+15 Conclusion 18
+1 Introduction
+FAIRLYNK est une plateforme de gestion du cycle de vie des contrats (CLM, pour
+Contract Lifecycle Management) développée par Digiteam, une entité spécialisée dans le
+développement web et mobile, sous légide dArchytas Conseil, une société française ba-
+2
+sée à Sèvres qui excelle dans le conseil, lédition de logiciels et le recrutement pour les
+secteurs bancaire et financier. Conçue pour transformer les données contractuelles en un
+atout stratégique, FAIRLYNK automatise et optimise chaque étape du cycle contractuel,
+de la rédaction à la post-exécution, en passant par la validation, la signature électro-
+nique et le suivi des échéances. La plateforme sadresse aux équipes juridiques, commer-
+ciales, achats, ressources humaines (RH) et financières, et est utilisée dans des secteurs
+variés comme la banque, lassurance et lindustrie. Grâce à des fonctionnalités avancées
+telles quune contrathèque centralisée, des workflows personnalisés, des signatures électro-
+niques conformes aux normes mondiales (par exemple, eIDAS), et un assistant IA appelé
+Contract Explorer pour des recherches sémantiques, FAIRLYNK réduit le temps dappro-
+bation des contrats jusquà 80 % et améliore la conformité tout en minimisant les risques
+opérationnels, selon les données du site officiel (www.fairlynk.com). Ce guide exhaustif,
+conçu pour atteindre environ vingt pages, détaille les fonctionnalités de FAIRLYNK, ex-
+plique les termes clés en profondeur, fournit des exemples concrets de contrats, modèles
+et clauses, et explore des cas dusage sectoriels pour servir de base textuelle à un pipeline
+RAG pour un chatbot LLM. Archytas Conseil positionne FAIRLYNK comme une solu-
+tion phare de sa division dédition de logiciels, aux côtés doutils comme LeSphinx, une
+plateforme de recherche juridique. www.archytas-conseil.com
+1.1 Rôle de Digiteam dans le développement de FAIRLYNK
+Digiteam, une équipe dexperts en développement logiciel basée en région parisienne, est
+responsable de la conception et du développement de FAIRLYNK. Spécialisée dans les
+applications web et mobiles, Digiteam a apporté son expertise en développement agile
+pour créer une plateforme robuste et intuitive, intégrant des technologies avancées comme
+lintelligence artificielle pour Contract Explorer et des intégrations fluides avec des outils
+dentreprisetelsqueSalesforceetSAP.Selonleursite(www.digiteam.io),Digiteamexcelle
+dans la création de solutions personnalisées qui répondent aux besoins spécifiques des
+clients, ce qui a permis à FAIRLYNK de devenir une plateforme CLM de pointe. Leur
+approche centrée sur le client garantit que FAIRLYNK offre une expérience utilisateur
+fluide, une sécurité renforcée et une scalabilité pour les organisations de toutes tailles.
+Digiteam continue de maintenir et doptimiser FAIRLYNK, en intégrant des mises à jour
+pour répondre aux évolutions des besoins sectoriels.[](http ://digiteam.io/)
+Terme clé : CLM (Contract Lifecycle Management)
+Le CLM désigne lensemble des processus permettant de gérer un contrat de sa création
+à son expiration ou renouvellement, incluant la rédaction, la négociation, lapprobation,
+la signature, le suivi des échéances et lanalyse. Dans FAIRLYNK, développé par Digi-
+team, le CLM est optimisé grâce à des outils dautomatisation et dintelligence artificielle
+qui réduisent les erreurs, accélèrent les cycles dapprobation et améliorent la traçabilité.
+Par exemple, un contrat de prêt bancaire peut être rédigé à partir dun modèle, validé
+par plusieurs parties via un workflow, signé électroniquement, et suivi via des alertes
+automatiques pour les échéances. Cette approche est particulièrement précieuse dans les
+3
+secteurs réglementés comme la banque ou lassurance, où la conformité est cruciale. Le
+développement par Digiteam intègre des fonctionnalités comme Contract Explorer, qui
+utilise le traitement du langage naturel pour permettre des recherches sémantiques dans
+la contrathèque, facilitant laccès aux clauses ou contrats pertinents. Pour un pipeline
+RAG, cette définition permet au chatbot de répondre à des questions comme ń Quest-ce
+que le CLM? ż, ń Comment FAIRLYNK optimise-t-il la gestion des contrats? ż ou ń
+Quel est le rôle de Digiteam dans FAIRLYNK? ż
+Terme clé : Contrathèque
+La contrathèque est une bibliothèque numérique centralisée qui stocke, organise et gère
+les contrats, clauses et documents associés. Dans FAIRLYNK, développée par Digiteam,
+elle permet aux utilisateurs de rechercher des contrats via des mots-clés ou une recherche
+sémantique alimentée par lIA, comme identifier tous les contrats avec une clause de confi-
+dentialité spécifique. La contrathèque garantit un accès sécurisé basé sur les rôles et les
+groupes, réduisant les risques daccès non autorisé. Elle facilite également la réutilisation
+de clauses standardisées, ce qui accélère la création de nouveaux contrats. Par exemple,
+une équipe RH peut utiliser la contrathèque pour retrouver tous les contrats de travail
+signés au cours de lannée précédente. Pour un pipeline RAG, cette explication permet
+au chatbot de répondre à des questions comme ń Quest-ce que la contrathèque dans
+FAIRLYNK? ż ou ń Comment rechercher un contrat spécifique? ż
+Terme clé : Contract Explorer
+Contract Explorer est un assistant IA intégré à FAIRLYNK, développé par Digiteam, qui
+utilise le traitement du langage naturel pour faciliter la navigation dans la contrathèque.
+Contrairement à une recherche classique par mots-clés, Contract Explorer comprend le
+contexte des requêtes, permettant des recherches complexes comme ń Trouver tous les
+contrats avec une clause de pénalité pour retard de livraison ż. Cet outil réduit le temps
+nécessaire pour localiser des documents critiques et améliore la prise de décision en four-
+nissant des informations pertinentes rapidement. Pour un pipeline RAG, cette définition
+permet au chatbot de répondre à des questions comme ń Comment Contract Explorer
+aide-t-il dans FAIRLYNK? ż ou ń Quelles sont les capacités de recherche sémantique? ż
+2 Cas dusage sectoriels
+FAIRLYNK,développéparDigiteam,estadaptéàunevariétédesecteurs,chacunavecdes
+besoinsspécifiquesenmatièredegestioncontractuelle.Cettesectionexploredesscénarios
+concrets pour illustrer comment la plateforme répond aux exigences des équipes dans la
+banque, lassurance, les RH et les achats.
+2.1 Banque et finance
+Dans le secteur bancaire, FAIRLYNK permet de gérer des contrats complexes comme
+les accords de prêt, les contrats de services financiers ou les conventions de garantie. Les
+4
+équipes juridiques utilisent des modèles standardisés pour rédiger des contrats conformes
+aux réglementations, tandis que les workflows automatisés accélèrent les approbations.
+Par exemple, un contrat de prêt peut être créé à partir dun modèle, validé par le dépar-
+tement conformité, signé électroniquement par les parties, et suivi via des alertes pour les
+échéances de remboursement. La contrathèque permet de stocker tous les contrats liés à
+un client, facilitant les audits réglementaires.
+2.2 Assurance
+Dans lassurance, FAIRLYNK optimise la gestion des polices, des contrats de réassurance
+et des accords avec les courtiers. La recherche sémantique via Contract Explorer permet
+de localiser rapidement des clauses spécifiques, comme les conditions de couverture. Les
+tableaux de bord affichent des métriques, comme ń 28 contrats arrivent à échéance dans
+90 jours ż, pour prioriser les renouvellements. Par exemple, un assureur peut configurer
+un workflow pour quune police soit revue par un actuaire avant signature, réduisant les
+risques derreurs.
+2.3 Ressources humaines
+Pour les RH, FAIRLYNK simplifie la gestion des contrats de travail, des accords de
+confidentialité et des documents donboarding. Les modèles standardisés garantissent lu-
+niformité, tandis que les signatures électroniques accélèrent lintégration des nouveaux
+employés. Par exemple, un contrat de travail peut être généré, signé par le nouvel em-
+ployé via un lien sécurisé, et archivé dans la contrathèque en une journée.
+2.4 Achats
+Les équipes dachats utilisent FAIRLYNK pour gérer les contrats fournisseurs, en optimi-
+sant le sourcing et le suivi des obligations. Les workflows automatisent les approbations,
+tandisquelestableauxdebordsurveillentlesperformancesdesfournisseurs.Parexemple,
+un acheteur peut comparer les termes de plusieurs contrats fournisseurs dans la contra-
+thèque pour identifier les meilleures conditions.
+3 Exemples de contrats
+CettesectionprésentedesexemplesconcretsdecontratsgérésdansFAIRLYNK,illustrant
+leur structure et leur gestion dans différents secteurs.
+3.1 Contrat de prêt bancaire
+Description : Un contrat de prêt bancaire définit les conditions dun prêt entre une
+banque et un emprunteur, incluant le montant, le taux dintérêt, la durée, et les clauses
+de remboursement.
+5
+Exemple : Une banque utilise FAIRLYNK pour créer un contrat de prêt de 500 000
+pour une PME, avec un taux dintérêt de 3 % sur 5 ans. Le contrat inclut une clause
+de remboursement anticipé et une clause de garantie. Dans FAIRLYNK, le contrat est
+généré à partir dun modèle, validé par le service conformité, signé électroniquement par
+lemprunteur, et suivi via des alertes pour les échéances de remboursement.
+Avantages dans FAIRLYNK : Automatisation du workflow, recherche sémantique des
+clauses, suivi des paiements.
+3.2 Police dassurance
+Description : Une police dassurance détaille les conditions de couverture entre un assu-
+reur et un assuré, incluant les primes, les exclusions, et les obligations.
+Exemple : Une compagnie dassurance rédige une police automobile avec une prime an-
+nuelle de 1 200 , incluant une clause dexclusion pour les conducteurs non déclarés. Dans
+FAIRLYNK, la police est créée à partir dun modèle, validée par un actuaire, signée élec-
+troniquement, et archivée dans la contrathèque.
+Avantages dans FAIRLYNK : Standardisation des clauses, conformité réglementaire,
+alertes pour les renouvellements.
+3.3 Contrat de travail
+Description : Un contrat de travail établit les conditions demploi entre un employeur
+et un employé, incluant le salaire, les horaires, et les avantages.
+Exemple : Une entreprise RH crée un contrat à durée indéterminée pour un développeur
+avec un salaire de 45 000 /an, incluant une clause de confidentialité. Dans FAIRLYNK,
+le contrat est généré à partir dun modèle, signé électroniquement par lemployé, et stocké
+dans la contrathèque.
+Avantages dans FAIRLYNK : Rapidité de création, signature électronique, gestion
+centralisée.
+3.4 Contrat fournisseur
+Description : Un contrat fournisseur définit les termes dapprovisionnement entre une
+entreprise et un fournisseur, incluant les prix, les délais, et les pénalités.
+Exemple : Une entreprise dachats signe un contrat avec un fournisseur pour 10 000 uni-
+tés de matériel à 50 /unité, avec une clause de pénalité pour retard. Dans FAIRLYNK, le
+contrat est rédigé, validé par le service achats, signé électroniquement, et suivi pour les
+livraisons.
+Avantages dans FAIRLYNK : Suivi des performances, alertes sur les échéances, com-
+paraison des termes.
+6
+3.5 Contrat de partenariat commercial
+Description : Un contrat de partenariat commercial établit une collaboration entre deux
+entreprises pour un projet commun, incluant les responsabilités, les revenus partagés, et
+les clauses de confidentialité.
+Exemple : Deux entreprises technologiques signent un contrat pour développer une ap-
+plication conjointe, avec une clause de partage des revenus à 60/40. Dans FAIRLYNK,
+le contrat est rédigé à partir dun modèle, validé par les deux parties, signé électronique-
+ment, et suivi pour les jalons du projet.
+Avantages dans FAIRLYNK : Gestion collaborative, suivi des jalons, recherche sé-
+mantique des clauses.
+4 Exemples de modèles de contrats
+Les modèles de contrats dans FAIRLYNK, développés par Digiteam, sont des documents
+préformatés avec des champs personnalisables et des workflows associés, stockés dans la
+contrathèque pour une réutilisation rapide. Voici des exemples par secteur.
+4.1 Modèle de contrat de prêt bancaire
+Description : Un modèle pour les prêts bancaires inclut des champs pour le montant,
+le taux dintérêt, la durée, et des clauses standard.
+Exemple :
+— Titre : Contrat de prêt bancaire standard
+— Champs personnalisables:Nomdelemprunteur,montantduprêt,tauxdintérêt,
+durée, garanties.
+— Clauses standard : Remboursement anticipé, défaut de paiement, garanties col-
+latérales.
+— Workflow : Rédaction par le conseiller bancaire, validation par le service confor-
+mité, signature électronique par lemprunteur.
+Utilisation dans FAIRLYNK : Le modèle est sélectionné dans la contrathèque, les
+champs sont remplis via un formulaire, et le workflow automatisé guide le processus
+jusquà la signature.
+4.2 Modèle de police dassurance
+Description : Un modèle pour les polices dassurance inclut des champs pour la prime,
+la couverture, et les exclusions.
+Exemple :
+— Titre : Police dassurance automobile
+7
+— Champs personnalisables : Nom de lassuré, type de véhicule, prime annuelle,
+durée de couverture.
+— Clauses standard : Exclusions, conditions de sinistre, renouvellement automa-
+tique.
+— Workflow : Rédaction par lagent dassurance, validation par lactuaire, signature
+électronique par lassuré.
+Utilisation dans FAIRLYNK : Le modèle accélère la création de polices conformes,
+avec des clauses pré-approuvées.
+4.3 Modèle de contrat de travail
+Description : Un modèle pour les contrats de travail inclut des champs pour le salaire,
+les horaires, et les avantages.
+Exemple :
+— Titre : Contrat de travail à durée indéterminée
+— Champs personnalisables : Nom de lemployé, poste, salaire, date de début.
+— Clauses standard : Confidentialité, préavis, avantages sociaux.
+— Workflow : Rédaction par les RH, validation par le service juridique, signature
+électronique par lemployé.
+Utilisation dans FAIRLYNK : Le modèle garantit luniformité et la conformité des
+contrats RH.
+4.4 Modèle de contrat fournisseur
+Description : Un modèle pour les contrats fournisseurs inclut des champs pour les pro-
+duits, les prix, et les délais.
+Exemple :
+— Titre : Contrat dapprovisionnement standard
+— Champs personnalisables : Nom du fournisseur, produits, prix unitaire, délais
+de livraison.
+— Clauses standard : Pénalités pour retard, résiliation, contrôle qualité.
+— Workflow : Rédaction par le service achats, validation par le service juridique,
+signature électronique par le fournisseur.
+Utilisation dans FAIRLYNK : Le modèle facilite la négociation et le suivi des obli-
+gations fournisseurs.
+8
+4.5 Modèle de contrat de partenariat commercial
+Description : Un modèle pour les partenariats commerciaux inclut des champs pour les
+responsabilités, les revenus partagés, et les clauses de confidentialité.
+Exemple :
+— Titre : Contrat de partenariat commercial
+— Champs personnalisables : Noms des parties, objectifs du partenariat, partage
+des revenus, durée.
+— Clauses standard : Confidentialité, résiliation, propriété intellectuelle.
+— Workflow : Rédaction collaborative, validation par les services juridiques des deux
+parties, signature électronique.
+Utilisation dans FAIRLYNK : Le modèle permet une collaboration fluide et un suivi
+des jalons.
+5 Exemples de clauses types
+Les clauses types, développées par Digiteam pour FAIRLYNK, sont des sections standar-
+disées dun contrat, stockées dans la contrathèque pour une réutilisation facile. Voici des
+exemples courants.
+5.1 Clause de confidentialité
+Description : Une clause de confidentialité oblige les parties à protéger les informations
+sensibles partagées dans le cadre du contrat.
+Exemple de formulation :
+ń Les parties sengagent à ne pas divulguer à des tiers les informations confidentielles
+échangées dans le cadre de ce contrat, sauf autorisation écrite préalable. Cette obligation
+persiste pendant cinq ans après la fin du contrat. ż
+Cas dusage : Utilisée dans un contrat de travail pour protéger les données de lentreprise.
+Dans FAIRLYNK, Contract Explorer peut identifier tous les contrats avec cette clause
+pour des audits de conformité.
+Avantages dans FAIRLYNK : Réutilisation rapide via la contrathèque, vérification
+IA pour conformité.
+5.2 Clause de pénalité pour retard
+Description : Une clause de pénalité impose une compensation financière en cas de non-
+respect des délais.
+Exemple de formulation :
+ń En cas de retard de livraison supérieur à 7 jours ouvrables, le fournisseur versera une
+pénalité de 0,5 % du montant total du contrat par jour de retard, jusquà un maximum
+9
+de 10 %. ż
+Cas dusage : Incluse dans un contrat fournisseur pour garantir la ponctualité. FAIR-
+LYNK suit automatiquement les délais et envoie des alertes.
+Avantages dans FAIRLYNK : Suivi automatisé des pénalités, recherche sémantique
+des clauses similaires.
+5.3 Clause de résiliation
+Description : Une clause de résiliation définit les conditions de fin anticipée du contrat.
+Exemple de formulation :
+ń Toute partie peut résilier ce contrat avec un préavis écrit de 30 jours en cas de viola-
+tion substantielle des obligations contractuelles par lautre partie, non corrigée dans les
+15 jours suivant la notification. ż
+Cas dusage : Utilisée dans un contrat de service pour permettre une sortie en cas de
+non-conformité. FAIRLYNK stocke la clause dans la contrathèque pour une réutilisation
+facile.
+Avantages dans FAIRLYNK : Gestion centralisée, alertes pour les échéances de rési-
+liation.
+5.4 Clause de force majeure
+Description : Une clause de force majeure exonère les parties de leurs obligations en cas
+dévénements imprévisibles.
+Exemple de formulation :
+ń Aucune partie ne sera responsable des retards ou manquements causés par des événe-
+ments indépendants de sa volonté, tels que catastrophes naturelles, guerres ou grèves, à
+condition den informer lautre partie dans les 5 jours. ż
+Cas dusage : Incluse dans un contrat fournisseur pour gérer les imprévus. FAIRLYNK
+permet de rechercher tous les contrats avec cette clause via Contract Explorer.
+Avantages dans FAIRLYNK : Recherche sémantique, suivi des notifications.
+6 Avantages de lintelligence artificielle dans FAIR-
+LYNK
+Lintelligence artificielle, intégrée par Digiteam dans FAIRLYNK, est au cur de la plate-
+forme, notamment via Contract Explorer, qui permet des recherches sémantiques avan-
+cées dans la contrathèque. Cet assistant IA comprend le contexte des requêtes, comme
+ń Quels contrats incluent une clause de force majeure? ż, et fournit des résultats précis
+en quelques secondes. Les outils danalyse prédictive identifient les risques, comme les
+contrats proches de lexpiration ou les clauses non conformes. Par exemple, FAIRLYNK
+peut signaler quun contrat arrive à échéance dans 90 jours, avec une recommandation
+daction basée sur son historique.
+10
+7 Intégrations avec dautres outils
+FAIRLYNK, développé par Digiteam, sintègre avec des outils dentreprise comme Sa-
+lesforce, SAP, et Microsoft Office, offrant une interopérabilité fluide. Par exemple, les
+équipes commerciales peuvent synchroniser les données de vente de Salesforce pour géné-
+rer des contrats dans FAIRLYNK, tandis que les équipes financières intègrent les données
+contractuelles dans SAP pour suivre les paiements. Ces intégrations, mises en place par
+Digiteam,réduisentlesfrictionsetpermettentàFAIRLYNKdesadapterauxécosystèmes
+technologiques existants.
+8 Meilleures pratiques pour utiliser FAIRLYNK
+Pour maximiser lefficacité de FAIRLYNK, voici des conseils basés sur ses fonctionnalités
+développées par Digiteam :
+8.1 Optimisation des workflows
+- **Conseil** : Définissez des workflows clairs avec un minimum détapes. Par exemple,
+limitez les approbations à deux niveaux pour les contrats standards. - **Erreur cou-
+rante** : Créer des workflows trop complexes, ce qui ralentit le processus. Testez chaque
+workflow avec un contrat fictif.
+8.2 Gestion de la contrathèque
+- **Conseil** : Organisez les contrats par catégorie (par exemple, contrats fournisseurs,
+contrats RH) et utilisez des métadonnées pour faciliter la recherche. - **Erreur cou-
+rante** : Omettre de mettre à jour les métadonnées, rendant la recherche sémantique
+moins efficace.
+8.3 Utilisation de lIA
+- **Conseil** : Formulez des requêtes précises pour Contract Explorer, comme ń Contrats
+avec clause de confidentialité signés en 2024 ż, pour des résultats optimaux. - **Erreur
+courante** : Utiliser des termes vagues, ce qui réduit la précision des recherches.
+9 Fonctionnalités avancées
+FAIRLYNK, développé par Digiteam, offre des fonctionnalités avancées pour les utilisa-
+teurs expérimentés :
+11
+9.1 Gestion des versions
+FAIRLYNK permet de suivre les versions dun contrat, avec un historique des modi-
+fications. Par exemple, si une clause est modifiée pendant la négociation, FAIRLYNK
+conserve un enregistrement de chaque version, accessible dans la contrathèque.
+9.2 Alertes automatiques
+Les alertes signalent les échéances critiques, comme ń 28 contrats arrivent à échéance
+dans 90 jours ż. Les utilisateurs peuvent configurer des notifications par email ou dans
+linterface.
+9.3 Signatures électroniques
+FAIRLYNKprendenchargelessignaturesélectroniquesconformes(parexemple,eIDAS),
+avecsuivientempsréeldesstatutsdesignature.Parexemple,uncontratpeutêtreenvoyé
+à plusieurs parties pour signature simultanée.
+10 Connexion et gestion des utilisateurs
+10.1 Créer un compte via une invitation
+Description : Cette fonctionnalité permet à un nouvel utilisateur de rejoindre FAIR-
+LYNK via une invitation par email, garantissant un accès sécurisé.
+Étapes :
+1. Recevez une invitation par email dun administrateur.
+2. Cliquez sur ń Activer le compte ż dans lemail.
+3. Remplissez le formulaire (nom, email, mot de passe).
+4. Validez pour activer le compte.
+5. Accédez à https://dev.fairlynk.com.
+Terme clé : Invitation
+Une invitation est un mécanisme sécurisé permettant à un administrateur dajouter un
+utilisateur à FAIRLYNK. Le lien temporaire dans lemail empêche les accès non autorisés.
+10.2 Connexion à la plateforme
+Description : La connexion permet daccéder à la contrathèque, aux workflows et aux
+outils danalyse de FAIRLYNK.
+Étapes :
+1. Accédez à https://dev.fairlynk.com.
+12
+2. Entrez votre email et mot de passe.
+3. Cliquez sur ń Connexion ż.
+Terme clé : Connexion
+La connexion est le processus dauthentification sécurisé permettant aux utilisateurs dac-
+céder à FAIRLYNK.
+10.3 Réinitialisation du mot de passe
+Description : Cette fonctionnalité permet de réinitialiser un mot de passe oublié via un
+lien sécurisé.
+Étapes :
+1. Accédez à la page de connexion.
+2. Cliquez sur ń Mot de passe oublié ż.
+3. Recevez un email avec un lien de réinitialisation.
+4. Cliquez sur le lien et saisissez un nouveau mot de passe.
+5. Validez pour réactiver laccès.
+Terme clé : Réinitialisation du mot de passe
+La réinitialisation du mot de passe permet de récupérer laccès à un compte via un lien
+temporaire.
+11 Gestion des documents
+11.1 Créer un nouveau document à partir dun modèle
+Description : Cette fonctionnalité permet de générer un contrat à partir dun modèle
+dans la contrathèque.
+Étapes :
+1. Cliquez sur le menu à gauche.
+2. Sélectionnez ń Bibliothèque ż.
+3. Cliquez sur ń Document ż.
+4. Remplissez le formulaire.
+5. Sélectionnez ń À partir dun modèle ż.
+6. Choisissez un modèle et son workflow.
+Terme clé : Modèle
+Un modèle est un document préformaté contenant des clauses standardisées et un work-
+flow.
+13
+11.2 Créer un nouveau contrat à partir de zéro
+Description : Cette fonctionnalité permet de rédiger un contrat personnalisé sans mo-
+dèle.
+Étapes :
+1. Cliquez sur le menu à gauche.
+2. Sélectionnez ń Bibliothèque ż.
+3. Cliquez sur ń Document ż.
+4. Remplissez le formulaire.
+5. Sélectionnez ń À partir de zéro ż.
+6. Rédigez le contrat.
+Terme clé : Contrat
+Un contrat est un accord juridique définissant les obligations des parties.
+11.3 Créer un contrat à partir dun document Word, PowerPoint
+ou PDF
+Description : Cette fonctionnalité permet dimporter un document externe pour en faire
+un contrat.
+Étapes :
+1. Cliquez sur le menu à gauche.
+2. Sélectionnez ń Bibliothèque ż.
+3. Cliquez sur ń Document ż.
+4. Remplissez le formulaire (nom obligatoire).
+5. Sélectionnez ń À partir dun document Word, PowerPoint ou PDF ż.
+6. Téléchargez ou glissez-déposez le document.
+Terme clé : Document
+Un document est un fichier numérique stocké dans la contrathèque, pouvant être un
+contrat ou un fichier plus général.
+11.4 Partager un document avec un collaborateur
+Description : Cette fonctionnalité permet de partager un document pour une revue ou
+une approbation.
+Étapes :
+1. Cliquez sur le menu à gauche.
+2. Sélectionnez ń Bibliothèque ż.
+14
+3. Parcourez les documents.
+4. Sélectionnez un document.
+5. Cliquez sur ń Partager ż (en haut à droite).
+Terme clé : Collaborateur
+Un collaborateur est une personne autorisée à interagir avec un document, avec des
+permissions spécifiques.
+11.5 Supprimer un document
+Description : Cette fonctionnalité permet de placer un document dans la corbeille, sauf
+pour les contrats signés.
+Étapes :
+1. Cliquez sur le menu à gauche.
+2. Sélectionnez ń Bibliothèque ż.
+3. Parcourez les documents.
+4. Sélectionnez un document.
+5. Cliquez sur ń Action ż.
+6. Choisissez ń Placer dans la corbeille ż.
+Terme clé : Corbeille
+La corbeille est un espace temporaire pour les documents supprimés, permettant une
+récupération.
+11.6 Créer un modèle de contrat
+Description : Cette fonctionnalité permet de concevoir un modèle réutilisable avec des
+clauses standardisées.
+Étapes :
+1. Cliquez sur le menu à gauche.
+2. Sélectionnez ń Bibliothèque ż.
+3. Cliquez sur ń Modèle ż.
+4. Cliquez sur ń Nouveau modèle ż.
+5. Remplissez le formulaire.
+6. Sélectionnez ń À partir de zéro ż.
+7. Rédigez le modèle.
+Terme clé : Clause
+Une clause est une section dun contrat définissant une condition spécifique.
+15
+12 Administration
+12.1 Créer un nouveau champ intelligent
+Description : Les champs intelligents permettent de personnaliser les formulaires avec
+des éléments dynamiques.
+Étapes :
+1. Cliquez sur le menu à gauche.
+2. Sélectionnez ń Administration ż.
+3. Cliquez sur ń Champs intelligents ż.
+4. Cliquez sur ń Nouveau champ ż.
+5. Remplissez le formulaire.
+6. Cliquez sur ń Soumettre ż.
+Terme clé : Champ intelligent
+Un champ intelligent capture ou calcule des données dynamiques, comme une date dé-
+chéance.
+12.2 Créer un workflow
+Description : Un workflow automatise les étapes de traitement dun document.
+Étapes :
+1. Cliquez sur le menu à gauche.
+2. Sélectionnez ń Administration ż.
+3. Cliquez sur ń Workflow ż.
+4. Cliquez sur ń Nouveau workflow ż.
+5. Remplissez le formulaire.
+6. Cliquez sur ń Soumettre ż.
+Terme clé : Workflow
+Un workflow est une séquence automatisée détapes pour traiter un document.
+12.3 Créer un nouveau groupe
+Description : Cette fonctionnalité permet de regrouper des utilisateurs pour gérer leurs
+permissions.
+Étapes :
+1. Cliquez sur le menu à gauche.
+2. Sélectionnez ń Administration ż.
+3. Cliquez sur ń Groupes ż.
+16
+4. Cliquez sur ń Nouveau groupe ż.
+5. Remplissez le formulaire.
+6. Cliquez sur ń Soumettre ż.
+Terme clé : Groupe
+Un groupe regroupe des utilisateurs avec des permissions communes.
+12.4 Créer un nouveau rôle
+Description : Un rôle définit les permissions dun utilisateur ou dun groupe.
+Étapes :
+1. Cliquez sur le menu à gauche.
+2. Sélectionnez ń Administration ż.
+3. Cliquez sur ń Rôle ż.
+4. Cliquez sur ń Nouveau rôle ż.
+5. Remplissez le formulaire.
+6. Cliquez sur ń Soumettre ż.
+Terme clé : Rôle
+Un rôle définit les actions possibles dans FAIRLYNK.
+13 Statistiques et métriques
+FAIRLYNK, développé par Digiteam, fournit des métriques clés, comme ń 1302 contrats
+non signés ż, ń 749 contrats signés ż, ń 6 actions requises ż, et ń 28 contrats arrivent
+à échéance dans 90 jours ż. Ces données permettent de suivre les performances et les
+risques. Par exemple, un tableau de bord peut montrer que 28 contrats nécessitent une
+renégociation imminente, aidant les équipes à prioriser. Selon le site de FAIRLYNK, la
+plateforme réduit les délais dapprobation de 80 %.
+14 FAQ courantes
+- Quel est le rôle de Digiteam dans FAIRLYNK? Digiteam est léquipe de déve-
+loppement qui a conçu et maintient FAIRLYNK, intégrant des fonctionnalités comme
+Contract Explorer et les intégrations avec Salesforce. - Comment optimiser un work-
+flow? Simplifiez les étapes et testez avec des contrats fictifs. - Puis-je intégrer FAIR-
+LYNK avec Salesforce? Oui, FAIRLYNK sintègre avec Salesforce pour synchroniser
+les données de vente. - Quels types de contrats puis-je gérer? FAIRLYNK gère
+des contrats comme les prêts bancaires, les polices dassurance, les contrats de travail, les
+contrats fournisseurs, et les partenariats commerciaux.
+17
+15 Conclusion
+CeguideexhaustifdeFAIRLYNK,développéparDigiteamsouslégidedArchytasConseil,
+fournit une base riche pour un pipeline RAG, couvrant les fonctionnalités, les termes clés,
+les cas dusage, les exemples de contrats, modèles, clauses, et les avantages de lIA. Il est
+idéal pour un chatbot LLM répondant à des questions sur la gestion des contrats. Pour
+plus dinformations, visitez https://fairlynk.com.
+18

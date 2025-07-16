@@ -1,5 +1,4 @@
 import streamlit as st
-import streamlit.components.v1 as components
 from chatbot.rag_pipeline import RAGPipeline
 import base64
 import logging
@@ -15,8 +14,6 @@ st.set_page_config(
     layout="centered"
 )
 
-# Fixer le thème par défaut à "light"
-theme = "light"
 
 # Changer le logo et la couleur du titre selon le thème (fixé ici à light)
 logo_file = "static/logo_dm.png" 
