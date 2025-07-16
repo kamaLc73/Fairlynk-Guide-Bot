@@ -5,6 +5,7 @@ langchain
 langchain-community
 langchain-groq
 langchain-core
+langchain-huggingface
 sentence-transformers
 faiss-cpu
 python-dotenv
