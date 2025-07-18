@@ -2,9 +2,21 @@ import streamlit as st
 from chatbot.rag_pipeline import RAGPipeline
 import base64
 import logging
+import time
 
 # Logger configuration
 logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(levelname)s] %(message)s')
+
+# Fonction Python pour simuler l'effet typewriter dans Streamlit
+def stream_typewriter(text, container, delay=0.03):
+    displayed = ""
+    for char in text:
+        displayed += char
+        container.markdown(
+            f"<div class='bot-message'>{displayed}</div>",
+            unsafe_allow_html=True
+        )
+        time.sleep(delay)
 
 # Page config
 st.set_page_config(
@@ -177,6 +189,27 @@ theme_css = f"""
     .bot-message * {{
         color: {bot_msg_color} !important;
     }}
+    
+    /* Style pour le conteneur de chat */
+    .chat-container {{
+        margin-bottom: 20px;
+        padding-bottom: 20px;
+        min-height: 60vh;
+    }}
+    
+    /* Style pour séparer visuellement les messages */
+    .message-separator {{
+        margin: 15px 0;
+    }}
+    
+    /* Conteneur collant pour le formulaire */
+    .sticky-form {{
+        position: sticky;
+        bottom: 0;
+        background-color: {bg_color};
+        padding-top: 20px;
+        z-index: 100;
+    }}
 </style>
 """
 
@@ -190,14 +223,21 @@ with st.sidebar:
         toggle_theme()
         st.rerun()
 
-# Affichage du logo
+# Affichage du logo et du titre (TOUJOURS AFFICHÉ)
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
-    try:
-        st.image(logo_file, width=400)
-    except FileNotFoundError:
-        st.warning(f"Logo introuvable : {logo_file}")
+    with open(logo_file, "rb") as image_file:
+        logo_base64 = base64.b64encode(image_file.read()).decode()
 
+    st.markdown(
+        f"""
+        <a href="https://fairlynk.com/" target="_blank" title="Revenir à l'accueil">
+            <img src="data:image/png;base64,{logo_base64}" width="400"/>
+        </a>
+        """,
+        unsafe_allow_html=True
+    )
+    
 # Affichage du titre
 st.markdown(f"<h1 style='text-align: left; color: {title_color};'>Guide Chatbot</h1>", unsafe_allow_html=True)
 st.markdown(
@@ -216,9 +256,9 @@ if "history" not in st.session_state:
         )
     ]
 
-# Indicateur de soumission
-if "submitted" not in st.session_state:
-    st.session_state["submitted"] = False
+# Indicateur pour savoir si on est en train de traiter une réponse
+if "processing" not in st.session_state:
+    st.session_state["processing"] = False
 
 # Chargement du pipeline RAG avec spinner personnalisé
 @st.cache_resource
@@ -256,37 +296,41 @@ def load_rag_pipeline():
 
 rag = load_rag_pipeline()
 
-# Affichage des messages avec couleurs dynamiques
-with st.container():
-    for q, r in st.session_state["history"]:
-        if q != "🤖":
-            st.markdown(
-                f"<div style='background-color:{user_msg_bg};color:white;padding:14px 18px;"
-                f"font-size:1.08rem;border-radius:16px 16px 0 16px;margin-bottom:4px;"
-                f"width:fit-content;min-width:30%;max-width:70%;align-self:flex-end;"
-                f"word-break:break-word;margin-left:auto;text-align:right;display:block;'>{q}</div>",
-                unsafe_allow_html=True)
+# Conteneur principal pour l'historique des messages
+chat_container = st.container()
+
+# Affichage de l'historique des messages
+with chat_container:
+    for i, (q, r) in enumerate(st.session_state["history"]):
+        # Conteneur pour chaque paire question/réponse
+        message_container = st.container()
         
-        # Utilisation de la classe CSS pour les messages du bot
-        st.markdown(
-            f"<div class='bot-message'>{r}</div>",
-            unsafe_allow_html=True)
+        with message_container:
+            if q != "🤖":
+                # Message utilisateur
+                st.markdown(
+                    f"<div style='background-color:{user_msg_bg};color:white;padding:14px 18px;"
+                    f"font-size:1.08rem;border-radius:16px 16px 0 16px;margin-bottom:4px;"
+                    f"width:fit-content;min-width:30%;max-width:70%;align-self:flex-end;"
+                    f"word-break:break-word;margin-left:auto;text-align:right;display:block;'>{q}</div>",
+                    unsafe_allow_html=True
+                )
+            
+            # Message du bot
+            st.markdown(
+                f"<div class='bot-message'>{r}</div>",
+                unsafe_allow_html=True
+            )
+            
+            # Séparateur entre les messages
+            if i < len(st.session_state["history"]) - 1:
+                st.markdown("<div class='message-separator'></div>", unsafe_allow_html=True)
 
-# Champ de saisie utilisateur avec styles améliorés
-st.markdown("<div id='input-anchor'></div>", unsafe_allow_html=True)
+# Espace avant le formulaire
+st.markdown("<div style='margin-top: 30px;'></div>", unsafe_allow_html=True)
 
-# Conteneur personnalisé pour le formulaire - suppression du style en mode light
-form_container_style = f"""
-<div style="
-    background-color: {"transparent" if st.session_state["theme"] == "dark" else "transparent"};
-    border: {"none" if st.session_state["theme"] == "dark" else "none"};
-    border-radius: 12px;
-    padding: {"20px" if st.session_state["theme"] == "dark" else "0px"};
-    margin: 20px 0;
-">
-"""
-
-st.markdown(form_container_style, unsafe_allow_html=True)
+# Conteneur collant pour le formulaire
+st.markdown('<div class="sticky-form">', unsafe_allow_html=True)
 
 with st.form(key="chat_form", clear_on_submit=True):
     # Style personnalisé pour le label
@@ -295,29 +339,32 @@ with st.form(key="chat_form", clear_on_submit=True):
         unsafe_allow_html=True
     )
     
-    # Correction du problème du label vide et ajout du placeholder
+    # Champ de saisie
     user_input = st.text_input("Votre question", key="input_field", label_visibility="collapsed", placeholder="Tapez votre question ici...")
     
     col1, col2 = st.columns([1, 6])
     with col1:
-        submit = st.form_submit_button("Envoyer", help="Envoyer votre question")
+        submit = st.form_submit_button("Envoyer", help="Envoyer votre question", disabled=st.session_state["processing"])
 
-st.markdown("</div>", unsafe_allow_html=True)
+st.markdown("</div>", unsafe_allow_html=True)  # Fin du conteneur collant
 
-# Espace supplémentaire pour l'esthétique
-st.markdown("<br>", unsafe_allow_html=True)
-
-# Traitement de la soumission
-if submit and user_input:
+# Traitement de la soumission avec effet typewriter
+if submit and user_input and not st.session_state["processing"]:
+    st.session_state["processing"] = True
     logging.info(f"Nouvelle question utilisateur : {user_input}")
     
-    # Spinner avec couleur adaptée au thème
+    # Ajouter immédiatement la question à l'historique
+    st.session_state["history"].append((user_input, ""))
+    
+    # Créer un conteneur pour la réponse
+    response_container = st.empty()
+    
+    # Afficher un spinner pendant la génération
     try:
         with open("static/icon.png", "rb") as img_file:
             icon_base64 = base64.b64encode(img_file.read()).decode()
     except FileNotFoundError:
         icon_base64 = ""
-        logging.warning("Icône introuvable pour le spinner")
     
     spinner_html = f'''
     <div class="custom-spinner">
@@ -325,18 +372,25 @@ if submit and user_input:
         <span style="color:{spinner_color};font-weight:bold;font-size:1rem;">Génération de la réponse...</span>
     </div>
     '''
-    
-    spinner_placeholder = st.empty()
-    spinner_placeholder.markdown(spinner_html, unsafe_allow_html=True)
+    response_container.markdown(spinner_html, unsafe_allow_html=True)
     
     try:
+        # Générer la réponse
         response = rag.query(user_input)
         logging.info(f"Réponse générée : {response}")
     except Exception as e:
         logging.error(f"Erreur lors de la génération de la réponse : {e}")
         response = "Une erreur est survenue lors de la génération de la réponse."
     
-    spinner_placeholder.empty()
-    st.session_state["history"].append((user_input, response))
-    st.session_state["submitted"] = True
-    st.rerun()
+    # Mettre à jour l'historique avec la réponse
+    st.session_state["history"][-1] = (user_input, response)
+    
+    # Afficher la réponse avec effet typewriter
+    stream_typewriter(
+        response,
+        response_container,
+        delay=0.03
+    )
+    
+    # Réinitialiser l'état de traitement
+    st.session_state["processing"] = False
