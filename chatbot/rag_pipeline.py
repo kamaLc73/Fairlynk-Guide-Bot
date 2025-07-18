@@ -22,8 +22,8 @@ class RAGPipeline:
             max_tokens=700
         )
         self.prompt = ChatPromptTemplate.from_messages([
-            ("system", "Vous êtes un assistant utile qui répond en français. Utilisez le contexte suivant pour répondre précisément à la question. Contexte : {context}"),
-            ("human", "{question}")
+            ("system",  "Vous êtes un assistant intelligent et fiable. Répondez à la question dans la même langue que l'utilisateur, en vous basant uniquement sur le contexte ci-dessous. Si la réponse ne se trouve pas dans le contexte, dites-le simplement. Contexte : {context}")
+            ,("human", "{question}")
         ])
         self.parser = StrOutputParser()
         self.chain = self.prompt | self.llm | self.parser

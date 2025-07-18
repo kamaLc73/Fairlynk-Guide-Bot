@@ -9,11 +9,9 @@ Ce projet implémente un chatbot RAG pour répondre aux questions sur FAIRLYNK, 
 - Clé API Groq (obtenez-la sur https://console.groq.com)
 - Fichier `fairlynk_guide_rag.pdf` généré à partir de `fairlynk_guide_rag.tex`
 
-## Installation
-
-1. Créez un environnement virtuel :
+## Commandes
    ```bash
    python -m venv env
-   source env/bin/activate  # Linux/Mac
-   env\Scripts\activate     # Windows
+   .\env\Scripts\Activate.ps1
+   python -m streamlit run .\app.py
    ```
