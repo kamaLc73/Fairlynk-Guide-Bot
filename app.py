@@ -3,6 +3,9 @@ from chatbot.rag_pipeline import RAGPipeline
 import base64
 import logging
 import time
+import requests
+from io import BytesIO
+from PIL import Image
 
 # Logger configuration
 logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(levelname)s] %(message)s')
@@ -37,6 +40,14 @@ if "show_typewriter" not in st.session_state:
 if "typewriter_message" not in st.session_state:
     st.session_state["typewriter_message"] = ""
 
+# Initialiser les nouvelles fonctionnalités
+if "lang" not in st.session_state:
+    st.session_state["lang"] = "fr"
+
+# === SUPPRIMER LE MODE DE RÉPONSE ===
+if "response_mode" in st.session_state:
+    del st.session_state["response_mode"]
+
 # Fonction pour basculer le thème
 def toggle_theme():
     if st.session_state["theme"] == "dark":
@@ -62,7 +73,7 @@ else:
     bot_msg_color = "#222"
     spinner_color = "#29235c"
 
-# CSS pour le thème
+# CSS pour le thème (inchangé)
 theme_css = f"""
 <style>
     .stApp {{
@@ -210,8 +221,21 @@ theme_css = f"""
         word-break: break-word;
     }}
     
-    /* Correction spécifique pour le texte en mode sombre */
+    /* Correction spécifique pour le texte du bot */
     .bot-message * {{
+        color: {bot_msg_color} !important;
+    }}
+    
+    .bot-message p {{
+        color: {bot_msg_color} !important;
+        margin: 0;
+    }}
+    
+    .bot-message span {{
+        color: {bot_msg_color} !important;
+    }}
+    
+    .bot-message div {{
         color: {bot_msg_color} !important;
     }}
     
@@ -248,21 +272,126 @@ theme_css = f"""
         animation: blink-caret 0.75s step-end infinite;
     }}
     
+    /* Force la couleur du texte dans typewriter */
+    .typewriter-message * {{
+        color: {bot_msg_color} !important;
+    }}
+    
+    .typewriter-message p {{
+        color: {bot_msg_color} !important;
+        margin: 0;
+    }}
+    
     @keyframes blink-caret {{
         from, to {{ border-color: transparent; }}
         50% {{ border-color: {bot_msg_color}; }}
+    }}
+    
+    /* Styles pour les boutons de langue avec drapeaux */
+    .flag-button {{
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        border-radius: 6px;
+        border: 2px solid transparent;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }}
+    
+    .flag-button:hover {{
+        border-color: {"#e53a5c" if st.session_state["theme"] == "dark" else "#29235c"};
+    }}
+    
+    .flag-button.selected {{
+        border-color: {"#e53a5c" if st.session_state["theme"] == "dark" else "#29235c"};
+        background-color: {"rgba(229, 58, 92, 0.1)" if st.session_state["theme"] == "dark" else "rgba(41, 35, 92, 0.1)"};
     }}
 </style>
 """
 
 st.markdown(theme_css, unsafe_allow_html=True)
 
-# Bouton de basculement du thème dans la sidebar
+# Configuration des langues avec drapeaux
+lang_options = {
+    "fr": {
+        "label": "Fr",
+        "flag_url": "https://www.drapeauxdespays.fr/data/flags/emoji/openmoji/256x256/fr.png"
+    },
+    "en": {
+        "label": "Eng", 
+        "flag_url": "https://www.drapeauxdespays.fr/data/flags/emoji/openmoji/256x256/gb.png"
+    },
+    "es": {
+        "label": "Esp",
+        "flag_url": "https://www.drapeauxdespays.fr/data/flags/emoji/openmoji/256x256/es.png"
+    }
+}
+
+# Sidebar avec nouvelles fonctionnalités
 with st.sidebar:
-    st.markdown("### Paramètres")
-    theme_label = "🌙 Dark Mode" if st.session_state["theme"] == "dark" else "☀️ Light Mode"
+    # === PARAMÈTRES THÈME ===
+    st.markdown("### ⚙️ Paramètres")
+    theme_label = "🌙 Mode Sombre" if st.session_state["theme"] == "dark" else "☀️ Mode Clair"
     if st.button(theme_label, key="theme_toggle", help="Basculer entre le mode sombre et clair"):
         toggle_theme()
+        st.rerun()
+    
+    st.markdown("---")
+    
+    # === SÉLECTEUR DE LANGUE AVEC DRAPEAUX ===
+    st.markdown("### 🌍 Langue")
+    
+    # Afficher les options de langue avec drapeaux
+    cols = st.columns(3)
+    for i, (code, data) in enumerate(lang_options.items()):
+        with cols[i]:
+            try:
+                # Télécharger et afficher l'image du drapeau
+                response = requests.get(data["flag_url"], timeout=5)
+                if response.status_code == 200:
+                    img = Image.open(BytesIO(response.content))
+                    st.image(img, width=30)
+                else:
+                    st.write("🏳️")  # Flag fallback
+            except Exception as e:
+                st.write("🏳️")  # Flag fallback en cas d'erreur
+                logging.warning(f"Erreur chargement drapeau {code}: {e}")
+            
+            # Bouton de sélection
+            selected = st.session_state["lang"] == code
+            button_key = f"lang_{code}"
+            
+            if st.button(
+                data["label"], 
+                key=button_key,
+                help=f"Changer la langue vers {data['label']}",
+                type="primary" if selected else "secondary"
+            ):
+                st.session_state["lang"] = code
+                st.rerun()
+    
+    # Affichage de la langue sélectionnée
+    current_lang = lang_options[st.session_state["lang"]]["label"]
+    st.info(f"Langue actuelle : **{current_lang}**")
+    
+    st.markdown("---")
+    
+    # === RÉINITIALISATION ===
+    st.markdown("### 🧹 Réinitialisation")
+    if st.button("🗑️ Effacer l'historique", help="Réinitialise la conversation", type="secondary"):
+        st.session_state["history"] = [
+            (
+                "🤖",
+                "Bonjour ! Je suis votre assistant Fairlynk. Posez-moi une question sur les fonctionnalités, modèles ou clauses disponibles."
+            )
+        ]
+        st.session_state["show_typewriter"] = False
+        st.session_state["typewriter_message"] = ""
+        st.session_state["processing"] = False
+        st.success("Historique effacé !")
+        time.sleep(1)
         st.rerun()
 
 # Affichage du logo et du titre (TOUJOURS AFFICHÉ)
@@ -451,12 +580,22 @@ if (st.session_state["history"] and
     last_question = st.session_state["history"][-1][0]
     
     try:
-        # Générer la réponse
-        response = rag.query(last_question)
-        logging.info(f"Réponse générée avec succès")
+        # Récupérer la langue sélectionnée
+        lang_code = st.session_state["lang"]
+        
+        # Générer la réponse avec la langue sélectionnée
+        response = rag.query(last_question, lang=lang_code)
+        logging.info(f"Réponse générée avec succès en {lang_code}")
     except Exception as e:
         logging.error(f"Erreur lors de la génération de la réponse : {e}")
-        response = "Une erreur est survenue lors de la génération de la réponse. Veuillez réessayer."
+        
+        # Message d'erreur selon la langue
+        error_messages = {
+            "fr": "Une erreur est survenue lors de la génération de la réponse. Veuillez réessayer.",
+            "en": "An error occurred while generating the response. Please try again.",
+            "es": "Se produjo un error al generar la respuesta. Por favor, inténtelo de nuevo."
+        }
+        response = error_messages.get(st.session_state["lang"], error_messages["fr"])
     
     # Mettre à jour l'historique avec la réponse complète
     st.session_state["history"][-1] = (last_question, response)
