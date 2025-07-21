@@ -11,3 +11,7 @@ faiss-cpu
 python-dotenv
 streamlit
 numpy
+transformers
+langdetect
+Pillow
+requests
